@@ -1,0 +1,60 @@
+#include( "announce.vm" ) 
+#parse( "definition.vm" )
+
+package $package;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import java.util.Date;
+
+/**
+ * 
+ * $className#[[.]]#java
+ *
+ * @author $author ver. $version
+ * create on $date
+ */
+ 
+@Entity
+@Table(name="$params.get("table")" )
+public class $className implements Serializable {
+	private static final long serialVersionUID = ${serialId}L;
+	#****************
+	set class properties
+	*****************#
+	#foreach( $property in $params.get("properties") )
+#if( $property.pkFlag)@Id @GeneratedValue(strategy=GenerationType.AUTO)#end
+
+	@Column(name= "$property.columnName")
+	private $property.type $property.propName;
+	
+	#end
+	
+	#****************
+	set class get/set methods
+	*****************#
+	#foreach( $property in $params.get("properties") )
+	
+	/**
+	 * @return the $property.propName
+	 */
+	public $property.type get$property.methodName#[[(]]#) {
+		return $property.propName;
+	}
+	/**
+	 * @param $property.propName the $property.propName to set
+	 */
+	public void set$property.methodName#[[(]]#$property.type $property.propName) {
+		this.$property.propName = $property.propName;
+	}	
+	#end
+	
+}

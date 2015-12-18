@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="1.0" xmlns:m="http://ant.apache.org/ivy/maven">
+	<info organisation="$params.get("organisation")"
+		module="$params.get("module")"
+		revision="$params.get("revision")"
+		status="release"
+	/>
+</ivy-module>

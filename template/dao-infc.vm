@@ -1,0 +1,15 @@
+#include( "announce.vm" ) 
+#parse( "definition.vm" )
+
+package $package;
+
+import org.garden.dao.IDAO;
+
+/**
+ * I$className#[[DAO]]#.java
+ *
+ * @author $author ver. $version
+ * create on $date
+ */
+public interface I$className#[[DAO]]# extends IDAO<$className#[[>]]# {
+}

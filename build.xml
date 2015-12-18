@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="codegen-project" default="jar" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+	
+	<import file="properties.xml"/>
+	<property name="jar-name">codegen-garden</property>
+	<property name="jar-version">0.0.1</property>
+	
+	<target name="prepare">
+		<delete dir="${build.dir}" deleteonexit="true"/>
+		<delete dir="${dist.dir}" deleteonexit="true"/>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+	</target>
+	
+	<target name="init-ivy">
+		<ivy:settings file="${ivy.dir}/ivysettings.xml"/>
+		<ivy:retrieve/>
+	</target>
+	
+	<target name="compile" depends="init-ivy">
+		<javac srcdir="${src.dir}"
+	                destdir="${build.dir}" debug="${compile.debug}"
+	                deprecation="${compile.deprecation}" optimize="${compile.optimize}" encoding="utf-8"
+	                classpathref="lib.classpath">
+		</javac>
+		
+		<copy todir="${build.dir}">
+            <fileset dir="${src.dir}">
+                <include name="**/*.properties"/>    
+                <include name="**/*.xml"/>
+            </fileset>
+        </copy>
+	</target>
+	
+	<target name="jar" depends="prepare,compile">
+		<manifestclasspath property="jar.classpath" jarfile="${dist.dir}/${jar-name}-${jar-version}.jar">
+			<classpath>
+				<fileset dir="${lib.dir}" includes="*.jar"/>
+			</classpath>
+		</manifestclasspath>
+		
+		<jar destfile="${dist.dir}/${jar-name}-${jar-version}.jar" basedir="${build.dir}">
+			<manifest>
+	            <attribute name="Built-By" value="${user.name}"/>
+	            <attribute name="Specification-Title" value="Code Generation Tool"/>
+	            <attribute name="Specification-Version" value="${jar-version}"/>
+	            <attribute name="Specification-Vendor" value="GARDEN.org"/>
+				<attribute name="Class-Path" value="${jar.classpath}"/>
+	        </manifest>
+		</jar>
+	</target>
+	
+	<target name="gen-all" depends="gen-dao,gen-model,gen-spring"/>
+	
+	<target name="gen-dao" depends="gen-dao-infc,gen-dao-imp"/>
+	
+	<target name="gen-model" depends="jar">
+		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGen" classpathref="lib.classpath">
+			<arg value="${jdbc.file}"/>
+			<arg value="${codegen.tables}"/>
+			<arg value="${codegen.model.package}"/>
+			<arg value="${codegen.output.dir}"/>
+			<arg value="${codegen.template.model.dir}"/>
+			<arg value="${jar-version}"/>
+			<arg value="${codegen.model.prefix}"/>
+			<arg value="${codegen.model.postfix}"/>
+		</java>
+	</target>
+	
+	<target name="gen-dao-infc" depends="jar">
+		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGen" classpathref="lib.classpath">
+			<arg value="${jdbc.file}"/>
+			<arg value="${codegen.tables}"/>
+			<arg value="${codegen.daoinfc.package}"/>
+			<arg value="${codegen.output.dir}"/>
+			<arg value="${codegen.template.daoinfc.dir}"/>
+			<arg value="${jar-version}"/>
+			<arg value="${codegen.daoinfc.prefix}"/>
+			<arg value="${codegen.daoinfc.postfix}"/>
+		</java>
+	</target>
+	
+	<target name="gen-dao-imp" depends="jar">
+		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGen" classpathref="lib.classpath">
+			<arg value="${jdbc.file}"/>
+			<arg value="${codegen.tables}"/>
+			<arg value="${codegen.daoimp.package}"/>
+			<arg value="${codegen.output.dir}"/>
+			<arg value="${codegen.template.daoimp.dir}"/>
+			<arg value="${jar-version}"/>
+			<arg value="${codegen.daoimp.prefix}"/>
+			<arg value="${codegen.daoimp.postfix}"/>
+		</java>
+	</target>
+	
+	<target name="gen-spring" depends="jar">
+		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGenSpring" classpathref="lib.classpath">
+			<arg value="${jdbc.file}"/>
+			<arg value="${codegen.tables}"/>
+			<arg value="${codegen.daoimp.package}"/>
+			<arg value="${codegen.output.dir}"/>
+			<arg value="${codegen.template.spring.dir}"/>
+			<arg value="${jar-version}"/>
+		</java>
+	</target>
+</project>

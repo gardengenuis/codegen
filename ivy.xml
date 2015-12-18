@@ -1,0 +1,16 @@
+<ivy-module version="1.0">
+    <info organisation="garden" module="codegen"/>
+    <dependencies>
+    	<dependency org="apache" name="commons-lang" rev="2.4"/>
+    	<dependency org="apache" name="commons-logging" rev="1.1.3"/>
+    	<dependency org="log4j" name="log4j" rev="1.2.17"/>
+    	<dependency org="apache" name="commons-io" rev="2.4"/>
+    	<dependency org="apache" name="velocity" rev="1.7"/>
+    	<dependency org="apache" name="commons-collections" rev="3.2.1"/>
+    	
+    	<dependency org="oracle" name="ojdbc" rev="5.0"/>
+    	<dependency org="mysql" name="mysql-connector-java" rev="5.1.34"/>
+    	
+        <dependency org="garden" name="utility-garden" rev="0.0.1"/>
+    </dependencies>
+</ivy-module>
