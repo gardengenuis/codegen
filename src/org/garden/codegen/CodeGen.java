@@ -43,7 +43,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.garden.utils.DBUtils;
-import org.garden.utils.MathUtils;
 import org.garden.utils.RandomUtils;
 import org.garden.utils.TextUtils;
 import org.garden.utils.VelocityUtils;
@@ -68,8 +67,11 @@ public class CodeGen {
 		String outPath = args[3] + File.separator + TextUtils.transmitPakage2FolderPath(packageName);
 		String templatePath = args[4];
 		String version = args[5];
-		String prefix = args.length > 7 ? args[6] : "";
-		String postfix = args.length == 7 ? args[6] : args[7];
+		String prefix = args[6];
+		String postfix = args[7];
+		String modelPkg = args.length >= 9 ? args[8] : null;
+		String infcPkg = args.length >= 10 ? args[9] : null;
+		String mapperPkg = args.length >= 11 ? args[10] : null;
 		
 		log.debug("userDefTables:" + userDefTables);
 		log.debug("packageName:" + packageName);
@@ -78,6 +80,9 @@ public class CodeGen {
 		log.debug("version:" + version);
 		log.debug("prefix:" + prefix);
 		log.debug("postfix:" + postfix);
+		log.debug("modelPkg:"+ modelPkg);
+		log.debug("infcPkg:"+ infcPkg);
+		log.debug("mapperPkg:"+ mapperPkg);
 		
 		File outPathFile = new File(outPath);
 		outPathFile.mkdirs();
@@ -99,7 +104,9 @@ public class CodeGen {
 		
 		for ( String targetTable : targetTables) {
 			Map<String, Object> params = new HashMap<String, Object>();
-				
+			
+			params.put("shortName", TextUtils.getDbShortName(targetTable));
+			params.put("classProp", TextUtils.lowerCaseFirstLetter(TextUtils.transmitDBName2JavaClassName(targetTable)));
 			params.put("className", TextUtils.transmitDBName2JavaClassName(targetTable));
 			params.put("author", Constants.CODEGEN_AUTHOR);
 			params.put("version", version);
@@ -109,6 +116,9 @@ public class CodeGen {
 			params.put("properties", CodeGenUtils.transmitColumn(conn, targetTable));
 			params.put("prefix", prefix);
 			params.put("postfix", postfix);
+			params.put("infcPkg", infcPkg);
+			params.put("modelPkg", modelPkg);
+			params.put("mapperPkg", mapperPkg);
 			params.put("serialId", RandomUtils.generate(18, 0, true));
 			
 			String outFile = outPath + File.separator + prefix + TextUtils.transmitDBName2JavaClassName(targetTable) + postfix;
@@ -116,6 +126,4 @@ public class CodeGen {
 			VelocityUtils.template2File(templatePath, params, outFile);
 		}
 	}
-
-	
 }

@@ -1,0 +1,6 @@
+#parse( "definition.vm")
+#foreach( $clz in $params.get("class") )
+<bean id="$clz.get("classNameL")#[[DAO]]#" class="$package#[[.]]#$clz.get("className")#[[DAO]]#">
+    <property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>
+</bean>
+#end

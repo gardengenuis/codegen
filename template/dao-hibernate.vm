@@ -1,0 +1,54 @@
+#include( "announce.vm" ) 
+#parse( "definition.vm" )
+
+package $package;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+
+import org.garden.dao.hibernate.DAO;
+import org.garden.utils.Pager;
+import org.apache.commons.lang.StringUtils;
+
+import ${modelPkg}.${className};
+import ${infcPkg}.I${className}DAO;
+/**
+ * 
+ * $className#[[DAO]]#.java
+ *
+ * @author $author ver. $version
+ * create on $date
+ */
+public class $className#[[DAO]]# extends DAO<$className#[[>]]# implements I$className#[[DAO]]# {
+	
+	@Override
+	public List<${className}> get${className}s(${className} ${classProp}, Pager pager) {
+		List<Map<String, Object>> states = new ArrayList<Map<String,Object>>();
+		Map<String, Object> keyValue = new HashMap<String, Object>();
+		
+		String hql = "from " + ${className}.class.getName() + " t where 1=1";
+#foreach( $property in $params.get("properties") )
+#if(${property.type} == 'String')
+		if ( StringUtils.isNotEmpty(${classProp}.get${property.methodName}())) {
+#else
+		if ( ${classProp}.get${property.methodName}() != null) {
+#end
+			hql += " and t.${property.propName} = :${property.propName}";
+			keyValue.put("${property.propName}", ${classProp}.get${property.methodName}());
+		}
+#end		
+		states.add(keyValue);
+		
+		if( pager == null)
+			return findByHql(hql, states);
+		else
+			return findByHql(hql, states, pager);
+	}
+	
+	@Override
+	public List<${className}> get${className}s(${className} ${classProp}) {
+		return get${className}s( ${classProp}, null);
+	}
+}

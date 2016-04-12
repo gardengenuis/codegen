@@ -1,0 +1,133 @@
+#parse( "definition.vm" )
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${className}">
+	<!-- 
+		base config
+	 -->
+	<sql id="COLUMN_ALIAS_SELECT">
+#foreach( $property in $properties )
+		${shortName}.${property.columnName}#if( ${properties.size()} > ${velocityCount}),#end#end
+
+	</sql>
+	
+	<sql id="COLUMN_ALIAS_INSERT">
+		<trim prefix="(" suffixOverrides="," suffix=")">
+#foreach( $property in $properties )
+			<if test="${property.propName} != null and ${property.propName} != '' ">
+				${property.columnName},
+			</if>
+#end
+		</trim>
+	</sql>
+	
+	<sql id="COLUMN_ALIAS_INSERT_VALUE">
+		<trim prefix="(" suffixOverrides="," suffix=")">
+#foreach( $property in $properties )
+			<if test="${property.propName} != null and ${property.propName} != '' ">
+				#{${property.propName}},
+			</if>
+#end
+		</trim>
+	</sql>
+	
+	<sql id="COLUMN_ALIAS_UPDATE">
+		<set>
+#foreach( $property in $properties )
+			<if test="${property.propName} != null and ${property.propName} != '' ">
+				${shortName}.${property.columnName}=#{${property.propName}},
+			</if>
+#end
+		</set>
+	</sql>
+	
+	<sql id="WHERE">
+#foreach( $property in $properties )
+		<if test="${property.propName} != null and ${property.propName} != '' ">
+			AND ${shortName}.${property.columnName}=#{${property.propName}}
+		</if>
+#end
+	</sql>
+	
+	<!-- 
+		select function
+	 -->
+	<select id="query" parameterType="${className}" resultType="${className}" >
+			SELECT 
+			<include refid="COLUMN_ALIAS_SELECT"/>
+			FROM 
+			${tableName} ${shortName}
+			WHERE 1=1
+			<include refid="WHERE"/>
+	</select>
+	
+	<select id="findAll" parameterType="${className}" resultType="${className}" >
+			SELECT 
+			<include refid="COLUMN_ALIAS_SELECT"/>
+			FROM 
+			${tableName} ${shortName}
+			WHERE 1=1
+	</select>
+	
+	<select id="findBySql" parameterType="map" resultType="map" >
+			${sql}
+	</select>
+	
+	<select id="findById" parameterType="java.lang.Integer" resultType="${className}" >
+			SELECT 
+			<include refid="COLUMN_ALIAS_SELECT"/>
+			FROM 
+			${tableName} ${shortName}
+			WHERE
+			ID=#{id}
+	</select>
+	
+	<select id="count" parameterType="${className}" resultType="java.lang.Integer" >
+			SELECT 
+			count(1)
+			FROM 
+			${tableName} ${shortName}
+			WHERE 1=1
+			<include refid="WHERE"/>
+	</select>
+	
+	<select id="countSql" parameterType="map" resultType="java.lang.Integer" >
+			SELECT 
+			count(1)
+			FROM 
+			(${sql})
+	</select>
+	
+	<!-- 
+		insert function
+	 -->
+	<insert id="insert" parameterType="${className}">
+		INSERT INTO ${tableName}
+		<include refid="COLUMN_ALIAS_INSERT"/>
+		VALUES
+		<include refid="COLUMN_ALIAS_INSERT_VALUE"/>
+	</insert>
+	
+	<!-- 
+		update function
+	 -->
+	 <update id="update" parameterType="${className}">
+	 	UPDATE ${tableName} ${shortName} SET
+		<include refid="COLUMN_ALIAS_UPDATE"/>
+		WHERE
+		${shortName}.ID=#{id}
+	 </update>
+	 
+	 <!-- 
+	 	delete function
+	  -->
+	  <delete id="delete" parameterType="${className}">
+	  	DELETE FROM ${tableName} WHERE ID=#{id}
+	  </delete>
+
+	  <delete id="deleteAll">
+	  	DELETE FROM ${tableName}
+	  </delete>
+</mapper>

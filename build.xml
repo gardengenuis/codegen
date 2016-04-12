@@ -50,9 +50,36 @@
 		</jar>
 	</target>
 	
-	<target name="gen-all" depends="gen-dao,gen-model,gen-spring"/>
+	<target name="gen-hibernate" depends="gen-dao-infc,gen-dao-hibernate,gen-model,gen-spring-hibernate"/>
+	<target name="gen-mybatis" depends="gen-dao-infc,gen-dao-mybatis,gen-model,gen-mapper,gen-mapconf,gen-spring-mybatis"/>
 	
-	<target name="gen-dao" depends="gen-dao-infc,gen-dao-imp"/>
+	<target name="gen-mapper" depends="jar">
+		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGen" classpathref="lib.classpath">
+			<arg value="${jdbc.file}"/>
+			<arg value="${codegen.tables}"/>
+			<arg value="${codegen.mapper.package}"/>
+			<arg value="${codegen.output.dir}"/>
+			<arg value="${codegen.template.mapper.dir}"/>
+			<arg value="${jar-version}"/>
+			<arg value="${codegen.mapper.prefix}"/>
+			<arg value="${codegen.mapper.postfix}"/>
+			<arg value="${codegen.model.package}"/>
+			<arg value="${codegen.daoinfc.package}"/>
+			<arg value="${codegen.mapper.package}"/>
+		</java>
+	</target>
+	
+	<target name="gen-mapconf" depends="jar">
+		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGenSpring" classpathref="lib.classpath">
+			<arg value="${jdbc.file}"/>
+			<arg value="${codegen.tables}"/>
+			<arg value="${codegen.model.package}"/>
+			<arg value="${codegen.output.dir}"/>
+			<arg value="${codegen.template.mapconf.dir}"/>
+			<arg value="${jar-version}"/>
+			<arg value="${codegen.mapconf.file}"/>
+		</java>
+	</target>
 	
 	<target name="gen-model" depends="jar">
 		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGen" classpathref="lib.classpath">
@@ -77,30 +104,61 @@
 			<arg value="${jar-version}"/>
 			<arg value="${codegen.daoinfc.prefix}"/>
 			<arg value="${codegen.daoinfc.postfix}"/>
+			<arg value="${codegen.model.package}"/>
 		</java>
 	</target>
 	
-	<target name="gen-dao-imp" depends="jar">
+	<target name="gen-dao-hibernate" depends="jar">
 		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGen" classpathref="lib.classpath">
 			<arg value="${jdbc.file}"/>
 			<arg value="${codegen.tables}"/>
-			<arg value="${codegen.daoimp.package}"/>
+			<arg value="${codegen.daohibernate.package}"/>
 			<arg value="${codegen.output.dir}"/>
-			<arg value="${codegen.template.daoimp.dir}"/>
+			<arg value="${codegen.template.daohibernate.dir}"/>
 			<arg value="${jar-version}"/>
 			<arg value="${codegen.daoimp.prefix}"/>
 			<arg value="${codegen.daoimp.postfix}"/>
+			<arg value="${codegen.model.package}"/>
+			<arg value="${codegen.daoinfc.package}"/>
 		</java>
 	</target>
 	
-	<target name="gen-spring" depends="jar">
+	<target name="gen-dao-mybatis" depends="jar">
+			<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGen" classpathref="lib.classpath">
+				<arg value="${jdbc.file}"/>
+				<arg value="${codegen.tables}"/>
+				<arg value="${codegen.daomybatis.package}"/>
+				<arg value="${codegen.output.dir}"/>
+				<arg value="${codegen.template.daomybatis.dir}"/>
+				<arg value="${jar-version}"/>
+				<arg value="${codegen.daoimp.prefix}"/>
+				<arg value="${codegen.daoimp.postfix}"/>
+				<arg value="${codegen.model.package}"/>
+				<arg value="${codegen.daoinfc.package}"/>
+			</java>
+		</target>
+	
+	<target name="gen-spring-hibernate" depends="jar">
 		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGenSpring" classpathref="lib.classpath">
 			<arg value="${jdbc.file}"/>
 			<arg value="${codegen.tables}"/>
-			<arg value="${codegen.daoimp.package}"/>
+			<arg value="${codegen.daohibernate.package}"/>
 			<arg value="${codegen.output.dir}"/>
-			<arg value="${codegen.template.spring.dir}"/>
+			<arg value="${codegen.template.spring.hibernate.dir}"/>
 			<arg value="${jar-version}"/>
+			<arg value="${codegen.spring.file}"/>
+		</java>
+	</target>
+	
+	<target name="gen-spring-mybatis" depends="jar">
+		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGenSpring" classpathref="lib.classpath">
+			<arg value="${jdbc.file}"/>
+			<arg value="${codegen.tables}"/>
+			<arg value="${codegen.daomybatis.package}"/>
+			<arg value="${codegen.output.dir}"/>
+			<arg value="${codegen.template.spring.mybatis.dir}"/>
+			<arg value="${jar-version}"/>
+			<arg value="${codegen.spring.file}"/>
 		</java>
 	</target>
 </project>

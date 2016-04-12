@@ -66,6 +66,7 @@ public class CodeGenSpring {
 		String outPath = args[3] + File.separator + TextUtils.transmitPakage2FolderPath(packageName);
 		String templatePath = args[4];
 		String version = args[5];
+		String fileName = args[6];
 
 		File outPathFile = new File(outPath);
 		outPathFile.mkdirs();
@@ -103,7 +104,7 @@ public class CodeGenSpring {
 			clzList.add(clz);
 		}
 		
-		String outFile = outPath + File.separator + "spring-dao.xml";
+		String outFile = outPath + File.separator + fileName;
 		
 		VelocityUtils.template2File(templatePath, params, outFile);
 	}

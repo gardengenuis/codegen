@@ -4,6 +4,9 @@
 package $package;
 
 import org.garden.dao.IDAO;
+import org.garden.utils.Pager;
+import java.util.List;
+import ${modelPkg}.${className};
 
 /**
  * I$className#[[DAO]]#.java
@@ -12,4 +15,7 @@ import org.garden.dao.IDAO;
  * create on $date
  */
 public interface I$className#[[DAO]]# extends IDAO<$className#[[>]]# {
+	public List<${className}> get${className}s(${className} ${classProp}, Pager page);
+	
+	public List<${className}> get${className}s(${className} ${classProp});
 }
