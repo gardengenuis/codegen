@@ -114,7 +114,7 @@
 		update function
 	 -->
 	 <update id="update" parameterType="${className}">
-	 	UPDATE ${tableName} ${shortName} SET
+	 	UPDATE ${tableName} ${shortName}
 		<include refid="COLUMN_ALIAS_UPDATE"/>
 		WHERE
 		${shortName}.ID=#{id}
