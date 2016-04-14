@@ -48,6 +48,12 @@
 				<attribute name="Class-Path" value="${jar.classpath}"/>
 	        </manifest>
 		</jar>
+		
+		<copy todir="${dependency-lib.dir}/garden/${jar-name}/jars">  
+            <fileset dir="${dist.dir}">  
+            	<include name="${jar-name}-${jar-version}.jar" />
+            </fileset>  
+        </copy>
 	</target>
 	
 	<target name="gen-hibernate" depends="gen-dao-infc,gen-dao-hibernate,gen-model,gen-spring-hibernate"/>
