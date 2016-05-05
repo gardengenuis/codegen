@@ -1,6 +1,8 @@
-#parse( "announce4Xml.vm" )
 #parse( "definition.vm" )
 <?xml version="1.0" encoding="UTF-8"?>
+
+#parse( "announce4Xml.vm" )
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -10,14 +12,18 @@
 	 -->
 	<sql id="COLUMN_ALIAS_SELECT">
 #foreach( $property in $properties )
-		${shortName}.${property.columnName}#if( ${properties.size()} > ${velocityCount}),#end#end
+		${shortName}.${property.columnName} AS ${property.propName}#if( ${properties.size()} > ${velocityCount}),#end#end
 
 	</sql>
 	
 	<sql id="COLUMN_ALIAS_INSERT">
 		<trim prefix="(" suffixOverrides="," suffix=")">
 #foreach( $property in $properties )
+#if(${property.type} == 'String')
 			<if test="${property.propName} != null and ${property.propName} != '' ">
+#else
+			<if test="${property.propName} != null">
+#end
 				${property.columnName},
 			</if>
 #end
@@ -27,7 +33,11 @@
 	<sql id="COLUMN_ALIAS_INSERT_VALUE">
 		<trim prefix="(" suffixOverrides="," suffix=")">
 #foreach( $property in $properties )
+#if(${property.type} == 'String')
 			<if test="${property.propName} != null and ${property.propName} != '' ">
+#else
+			<if test="${property.propName} != null">
+#end
 				#{${property.propName}},
 			</if>
 #end
@@ -37,7 +47,11 @@
 	<sql id="COLUMN_ALIAS_UPDATE">
 		<set>
 #foreach( $property in $properties )
+#if(${property.type} == 'String')
 			<if test="${property.propName} != null and ${property.propName} != '' ">
+#else
+			<if test="${property.propName} != null">
+#end
 				${shortName}.${property.columnName}=#{${property.propName}},
 			</if>
 #end
@@ -46,7 +60,11 @@
 	
 	<sql id="WHERE">
 #foreach( $property in $properties )
+#if(${property.type} == 'String')
 		<if test="${property.propName} != null and ${property.propName} != '' ">
+#else
+		<if test="${property.propName} != null">
+#end
 			AND ${shortName}.${property.columnName}=#{${property.propName}}
 		</if>
 #end
@@ -105,6 +123,9 @@
 		insert function
 	 -->
 	<insert id="insert" parameterType="${className}">
+		<!--selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE">
+			SELECT SEQ.NEXTVAL AS ID FROM DUAL
+		</selectKey-->
 		INSERT INTO ${tableName}
 		<include refid="COLUMN_ALIAS_INSERT"/>
 		VALUES
