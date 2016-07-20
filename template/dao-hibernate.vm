@@ -3,6 +3,9 @@
 
 package $package;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +25,7 @@ import ${infcPkg}.I${className}DAO;
  * create on $date
  */
 public class $className#[[DAO]]# extends DAO<$className#[[>]]# implements I$className#[[DAO]]# {
-	
+	private static Log log = LogFactory.getLog(${className}DAO.class);
 	@Override
 	public List<${className}> get${className}s(${className} ${classProp}, Pager pager) {
 		List<Map<String, Object>> states = new ArrayList<Map<String,Object>>();

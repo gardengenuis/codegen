@@ -5,6 +5,9 @@ package $package;
 
 import java.io.Serializable;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +29,7 @@ import java.util.Date;
 @Entity
 @Table(name="$params.get("table")" )
 public class $className implements Serializable {
+	private static Log log = LogFactory.getLog(${className}.class);
 	private static final long serialVersionUID = ${serialId}L;
 	#****************
 	set class properties

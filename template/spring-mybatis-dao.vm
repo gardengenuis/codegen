@@ -15,7 +15,8 @@ http://www.springframework.org/schema/tx/spring-tx.xsd
 http://www.springframework.org/schema/aop
 http://www.springframework.org/schema/aop/spring-aop.xsd">
 #foreach( $clz in $params.get("class") )
-<bean id="$clz.get("classNameL")#[[DAO]]#" class="$package#[[.]]#$clz.get("className")#[[DAO]]#">
-    <property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>
-</bean>
+	<bean id="$clz.get("classNameL")#[[DAO]]#" class="$package#[[.]]#$clz.get("className")#[[DAO]]#">
+	    <property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>
+	</bean>
 #end
+</beans>

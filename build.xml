@@ -131,6 +131,11 @@
 	
 	<target name="gen-dao-mybatis" depends="jar">
 			<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGen" classpathref="lib.classpath">
+				<!--
+				<jvmarg value="-Xdebug"/>
+				<jvmarg value="-Xnoagent"/>
+				<jvmarg value="-Xrunjdwp:transport=dt_socket,address=5555,server=y,suspend=y"/>
+				-->
 				<arg value="${jdbc.file}"/>
 				<arg value="${codegen.tables}"/>
 				<arg value="${codegen.daomybatis.package}"/>

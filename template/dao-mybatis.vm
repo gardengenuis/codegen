@@ -3,10 +3,14 @@
 
 package $package;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.garden.dao.mybatis.DAO;
 import java.util.List;
 import org.garden.utils.Pager;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import ${modelPkg}.${className};
 import ${infcPkg}.I${className}DAO;
 /**
@@ -17,10 +21,16 @@ import ${infcPkg}.I${className}DAO;
  * create on $date
  */
 public class $className#[[DAO]]# extends DAO<$className#[[>]]# implements I$className#[[DAO]]# {
+	private static Log log = LogFactory.getLog(${className}DAO.class);
+	
 	@Override
 	public List<${className}> get${className}s(${className} ${classProp}, Pager pager) {
-		PageBounds pageBounds = new PageBounds(pager.getCurPage(), pager.getItemsPerPage());
-		return this.sqlSessionTemplate.selectList(${className}.class.getSimpleName() + ".query", ${classProp}, pageBounds);
+		PageBounds pageBounds = new PageBounds(pager.getCurPage(), pager.getItemsPerPage(), true);
+		PageList<${className}> list = (PageList) this.sqlSessionTemplate.selectList(${className}.class.getSimpleName() + ".query",  ${classProp}, pageBounds);
+		pager.setTotalItems(list.getPaginator().getTotalCount());
+		pager.calc();
+		
+		return list;
 	}
 	
 	@Override
