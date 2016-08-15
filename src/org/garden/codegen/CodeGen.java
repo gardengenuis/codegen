@@ -73,6 +73,11 @@ public class CodeGen {
 		String infcPkg = args.length >= 10 ? args[9] : null;
 		String mapperPkg = args.length >= 11 ? args[10] : null;
 		
+		if( StringUtils.isNotEmpty(prefix)
+				&& prefix.equals("NULL")) {
+			prefix = "";
+		}
+		
 		log.debug("userDefTables:" + userDefTables);
 		log.debug("packageName:" + packageName);
 		log.debug("outPath:" + outPath);
