@@ -74,12 +74,14 @@
 		select function
 	 -->
 	<select id="query" parameterType="${className}" resultType="${className}" >
+		<![CDATA[
 			SELECT 
 			<include refid="COLUMN_ALIAS_SELECT"/>
 			FROM 
 			${tableName} ${shortName}
 			WHERE 1=1
 			<include refid="WHERE"/>
+		]]>
 	</select>
 	
 	<select id="findAll" parameterType="${className}" resultType="${className}" >
