@@ -1,0 +1,45 @@
+#parse( "definition.vm" )
+<?xml version="1.0" encoding="UTF-8"?>
+
+#parse( "announce4Xml.vm" )
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="${modelPkg}.${className}"
+        table="$params.get("table")"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="id"
+            column="ID"
+            type="java.lang.Integer"
+            unsaved-value="null"
+        >
+			<generator class="assigned" />
+        </id>
+
+#foreach( $property in $params.get("properties") )
+
+#if( !$property.pkFlag)
+	<property
+		name="${property.propName}"
+	#if( $property.type == 'Date')
+		type="java.util.${property.type}"
+	#else
+            type="java.lang.${property.type}"
+    #end
+            update="true"
+            insert="true"
+            access="property"
+            column="${property.columnName}"
+        />
+#end
+#end
+	</class>
+</hibernate-mapping>

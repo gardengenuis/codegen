@@ -87,6 +87,20 @@
 		</java>
 	</target>
 	
+	<target name="gen-hbm" depends="jar">
+		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGen" classpathref="lib.classpath">
+			<arg value="${jdbc.file}"/>
+			<arg value="${codegen.tables}"/>
+			<arg value="${codegen.hbm.package}"/>
+			<arg value="${codegen.output.dir}"/>
+			<arg value="${codegen.template.hbm.dir}"/>
+			<arg value="${jar-version}"/>
+			<arg value="${codegen.hbm.prefix}"/>
+			<arg value="${codegen.hbm.postfix}"/>
+			<arg value="${codegen.hbm.package}"/>
+		</java>
+	</target>
+	
 	<target name="gen-model" depends="jar">
 		<java fork="true" failonerror="yes" classname="org.garden.codegen.CodeGen" classpathref="lib.classpath">
 			<arg value="${jdbc.file}"/>
